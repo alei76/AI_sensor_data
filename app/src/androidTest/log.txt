@@ -31,3 +31,124 @@ AI sensor data {
 --12.28 13:07
 
 
+private String getWifiInfo() {
+    WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+    String status = "WIFI_STATE_UNENABLED";
+    if (wifi.getWifiState() == WifiManager.WIFI_STATE_ENABLED)
+    {
+        status = "WIFI_STATE_ENABLED";
+    }
+
+    return status;
+}
+
+// 获取媒体音量而已，还有系统音量，铃声等
+private int getVolumeInfo() {
+    AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+    return audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+}
+
+/*private void getCameraInfo() {
+    int cameraId = 0;
+    android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
+    android.hardware.Camera.getCameraInfo(cameraId, info);
+}*/
+
+
+private void save(String text) {
+    File file = new File(getExternalFilesDir(null), "hello.txt");
+    try {
+        OutputStream os = new FileOutputStream(file);
+        os.write(text.getBytes());
+        os.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+        Log.d("ExternalStorage", "Error writing " + file, e);
+    }
+}
+
+
+
+LocationListener locationListener = new LocationListener() {
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+    }
+};
+
+private void showLocation(Location location) {
+    String currentPosition = "latitude is " + location.getLatitude() + "\n" + "longitude is " + location.getLongitude();
+    positionTextView.setText(currentPosition);
+}
+
+
+ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_expandable_list_item_1, data);
+FruitAdapter adapter = new FruitAdapter(MainActivity.this, R.layout.fruit_item, fruitList);
+    ListView listView = (ListView)findViewById(R.id.list_view);
+    listView.setAdapter(adapter);
+    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Fruit fruit = fruitList.get(position);
+            Toast.makeText(MainActivity.this, fruit.getName(), Toast.LENGTH_SHORT).show();
+        }
+});
+
+
+
+
+// 测试GPS管理
+//positionTextView = (TextView)findViewById(R.id.position_text_view);
+//// What is Context?
+//locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+//List<String> providerList = locationManager.getProviders(true);
+//if (providerList.contains(LocationManager.GPS_PROVIDER)) {
+//provider = LocationManager.GPS_PROVIDER;
+//} else if (providerList.contains(LocationManager.NETWORK_PROVIDER)) {
+//provider = LocationManager.NETWORK_PROVIDER;
+//} else {
+//Toast.makeText(this, "No location provider to use", Toast.LENGTH_LONG).show();
+//return ;
+//}
+//
+//Location location = locationManager.getLastKnownLocation(provider);
+//if (location != null) {
+//showLocation(location);
+//}
+//locationManager.requestLocationUpdates(provider, 5000, 1, locationListener);
+
+
+
+if (locationManager != null) {
+    locationManager.removeUpdates(locationListener);
+}
+
+
+<Button
+    android:id="@+id/redo_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:gravity="center"
+    android:text="重新收集数据" />
+
+<Button
+    android:id="@+id/finish_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_toRightOf="@+id/redo_button"
+    android:layout_centerVertical="true"
+    android:text="记录数据并返回" />
+
