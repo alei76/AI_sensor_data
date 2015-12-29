@@ -152,3 +152,14 @@ if (locationManager != null) {
     android:layout_centerVertical="true"
     android:text="记录数据并返回" />
 
+
+
+文件存储的好文档：
+http://www.dengzhr.com/others/mobile/742?utm_source=tuicool&utm_medium=referral
+
+
+传感器缺失。。。根据getDefaultSensor的返回值是否为空就可以确定了！
+GPS感觉没必要。。。
+wifi和音量，目测只需要测一次就好了，属于这个序列的一个属性，传感器的值才是需要多次测的
+
+

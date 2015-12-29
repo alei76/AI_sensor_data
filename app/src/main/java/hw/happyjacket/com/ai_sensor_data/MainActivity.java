@@ -7,14 +7,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    final private String [] actionLabels = {"Running", "Walking", "Listening Music", "Drinking", "Sitting", "Coding", "A", "B", "C", "D", "E", "F", "G"};
+    //final private String [] actionLabels = {"Running", "Walking", "Listening Music", "Drinking", "Sitting", "Coding", "A", "B", "C", "D", "E", "F", "G"};
+    final private String [] actionLabels = {"跑步", "走路", "听音乐", "喝咖啡等", "休息中", "打代码"};
 
     private int selectedAction;
 
@@ -34,26 +34,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ListView action_list = (ListView) findViewById(R.id.action_list);
+        final ListView action_list = (ListView) findViewById(R.id.action_list);
         action_list.setSelection(selectedAction);
 
-        List<Action> actionObjects = getActionObjects();
-        ActionAdapter adapter = new ActionAdapter(MainActivity.this, R.layout.action_item, actionObjects);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, actionLabels);
         action_list.setAdapter(adapter);
         action_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedAction = position;
+                Toast.makeText(MainActivity.this, "选择动作：" + actionLabels[selectedAction], Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private ArrayList<Action> getActionObjects() {
-        ArrayList<Action> lists = new ArrayList<>();
-        for (int i = 0; i < actionLabels.length; ++i) {
-            lists.add(new Action(actionLabels[i], i));
-        }
-        return lists;
     }
 
 

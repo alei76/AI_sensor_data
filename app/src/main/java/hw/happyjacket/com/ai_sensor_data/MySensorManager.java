@@ -17,8 +17,9 @@ public class MySensorManager {
     private ArrayList<Sensor> sensorList;
     private ArrayList<SensorEventListener> listenerList;
     private float [][]  sensorData;
-    private final int sensorTypes[] = {Sensor.TYPE_ACCELEROMETER, Sensor.TYPE_GRAVITY, Sensor.TYPE_LIGHT};
-    private final int sensorvalueLength[] = {3, 1, 1};
+    private final int sensorTypes[] = {Sensor.TYPE_ACCELEROMETER, Sensor.TYPE_GRAVITY, Sensor.TYPE_LIGHT, Sensor.TYPE_GYROSCOPE, Sensor.TYPE_LINEAR_ACCELERATION ,
+            Sensor.TYPE_MAGNETIC_FIELD, Sensor.TYPE_ROTATION_VECTOR};
+    static final int sensorDataLength[] = {3, 3, 1, 3, 3, 3, 3};
 
     MySensorManager(SensorManager sm) {
         manager = sm;
@@ -28,19 +29,16 @@ public class MySensorManager {
 
         for (int i = 0; i < sensorTypes.length; ++i) {
             Sensor ss = manager.getDefaultSensor(sensorTypes[i]);
-            //if (ss == null) {
-            //Log.d("Error: ", "no sensor get");
-            //continue;
-            //} else {
-            //Log.d("Good: ", "other things wrong");
-            //}
+            if (ss == null) {
+                Log.d("No such sensor", ""+i);
+            }
             sensorList.add(ss);
             final int tmpId = i;
             SensorEventListener tmp = new SensorEventListener() {
                 @Override
                 public void onSensorChanged(SensorEvent event) {
                     sensorData[tmpId] = event.values;
-                    Log.d("sm", tmpId + ": " + valueToString(event.values));
+                    //Log.d("sm", tmpId + ": " + valueToString(event.values));
                 }
 
                 @Override
@@ -70,5 +68,21 @@ public class MySensorManager {
             s += String.format("%f", values[i]);
         }
         return s;
+    }
+
+    public void getSensorData(float[][] buffer, int position) {
+        int index = 0;
+        for (int i = 0; i < sensorData.length; ++i) {
+            for (int j = 0; j < sensorDataLength[i]; ++j) {
+                buffer[position][index++] = sensorData[i][j];
+            }
+        }
+    }
+
+    public static int getDataLength() {
+        int ans = 0;
+        for (int i = 0; i < sensorDataLength.length; ++i)
+            ans += sensorDataLength[i];
+        return ans;
     }
 }
