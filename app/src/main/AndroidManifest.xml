@@ -15,9 +15,10 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -25,10 +26,19 @@
         <activity
             android:name=".CollectSensorData"
             android:label="@string/title_activity_collect_sensor_data"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask" >
             <intent-filter>
-                <action android:name="CollectSensorData"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="CollectSensorData" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".PredictAction"
+            android:label="@string/title_activity_predict_action" >
+            <intent-filter>
+                <action android:name="PredictAction" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>

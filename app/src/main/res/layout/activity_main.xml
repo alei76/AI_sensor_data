@@ -13,12 +13,22 @@
 
     <Button
         android:id="@+id/start"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignTop="@+id/predict"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:textSize="25dp"
         android:text="开始收集数据" />
 
+    <Button
+        android:id="@+id/predict"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="玩一下预测"
+        android:textSize="25dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

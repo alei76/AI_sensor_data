@@ -18,60 +18,50 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
-public class CollectSensorData extends AppCompatActivity {
-    static final int MAX_Progress = 50, Progress_interval = 100;
-    final String OUT_FILE_NAME = "sensor_data.txt";
-
-    private  int current_progress = 0;
+public class PredictAction extends AppCompatActivity {
+    final int MAX_Progress = CollectSensorData.MAX_Progress, Progress_interval = CollectSensorData.Progress_interval;
+    private  int current_progress;
     private ProgressDialog collecting;
-    private Handler update_progress_dialog;
     private int selectedAction;
     private SensorManager manager;
     private float[][] buffer = new float[MAX_Progress][MySensorManager.getDataLength()];
     private boolean cancelled = false;
+    private Handler update_progress_dialog;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_collect_sensor_data);
+        setContentView(R.layout.activity_predict_action);
 
-        // get the selected action from the Main Activity
         Intent intent = getIntent();
         selectedAction = intent.getIntExtra("selectedAction", 0);
+        final String doingWhat = intent.getStringExtra("doing");
 
-        // create the MySensorManager object to collect sensor data
-        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        manager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        final MySensorManager ms = new MySensorManager(manager);
-
-
-        Button redo_button = (Button) findViewById(R.id.redo_button);
-        Button finish_button = (Button) findViewById(R.id.finish_button);
-        redo_button.setOnClickListener(new View.OnClickListener() {
+        Button start = (Button) findViewById(R.id.startPredict);
+        start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(CollectSensorData.this, "重新收集", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(CollectSensorData.this, MainActivity.class);
+                current_progress = 0;
+                cancelled = false;
+                update_progress_dialog.postDelayed(update_thread, Progress_interval);
+                collecting.show();
+            }
+        });
+
+        Button back = (Button) findViewById(R.id.backToMain);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PredictAction.this, MainActivity.class);
                 startActivity(intent);
             }
         });
-        finish_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                save(dataToString());
-                Toast.makeText(CollectSensorData.this, "数据已保存成功", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(CollectSensorData.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
+
 
         // create the ProgessDialog to display the progress collecting sensor data
-        collecting = new ProgressDialog(CollectSensorData.this);
+        collecting = new ProgressDialog(PredictAction.this);
         collecting.setTitle("传感器数据");
         collecting.setMessage("收集数据ing...");
         collecting.setCancelable(true);
@@ -82,12 +72,16 @@ public class CollectSensorData extends AppCompatActivity {
                 cancelled = true;
                 dialog.cancel();
                 dialog.dismiss();
-                Intent intent = new Intent(CollectSensorData.this, MainActivity.class);
+                Intent intent = new Intent(PredictAction.this, MainActivity.class);
                 startActivity(intent);
             }
         });
         collecting.setMax(MAX_Progress);
-        collecting.show();
+
+        // create the MySensorManager object to collect sensor data
+        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        manager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        final MySensorManager ms = new MySensorManager(manager);
 
 
         // create the Handler to timer the collecting progress
@@ -104,27 +98,25 @@ public class CollectSensorData extends AppCompatActivity {
                     update_progress_dialog.postDelayed(update_thread, Progress_interval);
                 } else {
                     collecting.dismiss();
-                    Toast.makeText(CollectSensorData.this, "收集完成", Toast.LENGTH_SHORT).show();
+                    Log.d("predict",dataToString() );
+                    Toast.makeText(PredictAction.this, "你说你在做：" + doingWhat + "\n" + "我猜你是在做...", Toast.LENGTH_SHORT).show();
                 }
             }
         };
-        update_progress_dialog.postDelayed(update_thread, Progress_interval);
     }
 
-    private void save(String text) {
-        FileWriter fw = null;
-        String fileName = "";
-        try {
-            fileName = getExternalFilesDir(null) + File.separator + OUT_FILE_NAME;
-            fw = new FileWriter(fileName, true);
-            fw.write(text, 0, text.length());
-            fw.close();
-            Toast.makeText(CollectSensorData.this, "Good "+fileName, Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.d("ExternalStorage", "Error writing " + fileName);
-            Toast.makeText(CollectSensorData.this, "Failed to open file "+fileName, Toast.LENGTH_SHORT).show();
+    private Runnable update_thread = new Runnable() {
+        @Override
+        public void run() {
+            update_progress_dialog.sendEmptyMessage(1);
+            update_progress_dialog.removeCallbacks(update_thread);
         }
+    };
+
+    public void getData(float[][] data, boolean wifiInfo, int volume) {
+        data = buffer;
+        wifiInfo = getWifiInfo();
+        volume = getVolumeInfo();
     }
 
     private String dataToString() {
@@ -156,19 +148,10 @@ public class CollectSensorData extends AppCompatActivity {
         return audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
     }
 
-
-    private Runnable update_thread = new Runnable() {
-        @Override
-        public void run() {
-            update_progress_dialog.sendEmptyMessage(1);
-            update_progress_dialog.removeCallbacks(update_thread);
-        }
-    };
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_collect_sensor_data, menu);
+        getMenuInflater().inflate(R.menu.menu_predict_action, menu);
         return true;
     }
 
