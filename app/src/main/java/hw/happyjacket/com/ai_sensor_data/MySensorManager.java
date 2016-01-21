@@ -17,9 +17,8 @@ public class MySensorManager {
     private ArrayList<Sensor> sensorList;
     private ArrayList<SensorEventListener> listenerList;
     private float [][]  sensorData;
-    private final int sensorTypes[] = {Sensor.TYPE_ACCELEROMETER, Sensor.TYPE_GRAVITY, Sensor.TYPE_LIGHT, Sensor.TYPE_GYROSCOPE, Sensor.TYPE_LINEAR_ACCELERATION ,
-            Sensor.TYPE_MAGNETIC_FIELD, Sensor.TYPE_ROTATION_VECTOR};
-    static final int sensorDataLength[] = {3, 3, 1, 3, 3, 3, 3};
+    private final int sensorTypes[] = SETTINGS.sensorTypes;
+    static final int sensorDataLength[] = SETTINGS.sensorDataLength;
 
     MySensorManager(SensorManager sm) {
         manager = sm;

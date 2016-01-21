@@ -23,7 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class CollectSensorData extends AppCompatActivity {
-    static final int MAX_Progress = 50, Progress_interval = 100;
+    static final int MAX_Progress = SETTINGS.MAX_Progress, Progress_interval = SETTINGS.Progress_interval;
     final String OUT_FILE_NAME = "sensor_data.txt";
 
     private  int current_progress = 0;

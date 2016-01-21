@@ -12,11 +12,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 
 public class PredictAction extends AppCompatActivity {
@@ -148,25 +151,36 @@ public class PredictAction extends AppCompatActivity {
         return audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_predict_action, menu);
-        return true;
+    public static String getArrfHeader() {
+        String header = "@relation test\n"
+                + "@attribute label {0, 1, 2, 3, 4, 5}\n"
+                + "@attribute wifi {true, false}\n"
+                + "@attribute volume integer\n";
+
+        for (int i = 0; i < SETTINGS.data_num_per_row; ++i)
+            header += String.format("@attribute f%d real\n", i);
+        header += "@data\n";
+
+        return header;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public void WriteArrfFile(String fileName, String data, int mode) {
+       FileOutputStream out;
+       BufferedWriter buf = null;
+       try {
+           out = openFileOutput(fileName, mode);
+           buf = new BufferedWriter(new OutputStreamWriter(out));
+           buf.write(data);
+       } catch (IOException e) {
+           e.printStackTrace();
+       } finally {
+           try {
+               if (buf != null) {
+                   buf.close();
+               }
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+       }
     }
 }
