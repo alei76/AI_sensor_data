@@ -1,12 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/list_item_bg">
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
     <TextView
         android:id="@+id/action_label"
-        android:layout_width="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:textSize="20dp"
+        android:text="Running"
+        android:gravity="center_vertical"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
 </LinearLayout>

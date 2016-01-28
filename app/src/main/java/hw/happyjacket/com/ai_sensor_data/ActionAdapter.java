@@ -25,7 +25,9 @@ public class ActionAdapter extends ArrayAdapter<Action> {
         Action action = getItem(position);
         View view = LayoutInflater.from(getContext()).inflate(resourceId, null);
         TextView actionLabel = (TextView) view.findViewById(R.id.action_label);
-        actionLabel.setText(action.getLabel());
+        actionLabel.setText(action.getLabel() + String.format("(%d)", action.getNum()));
+        /*Button number = (Button) view.findViewById(R.id.num_of_action);
+        number.setText("" + action.getNum());*/
         return view;
     }
 }

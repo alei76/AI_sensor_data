@@ -11,6 +11,26 @@
         android:layout_height="wrap_content">
     </ListView>
 
+    <!--<Button
+        android:id="@+id/Model"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="原始数据"
+        android:textSize="25dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="10dp"
+        android:layout_above="@+id/start"/>-->
+
+    <Button
+        android:id="@+id/train"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="训练模型"
+        android:textSize="25dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_above="@+id/start"/>
+
     <Button
         android:id="@+id/start"
         android:layout_width="wrap_content"

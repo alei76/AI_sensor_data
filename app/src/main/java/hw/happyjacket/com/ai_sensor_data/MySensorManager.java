@@ -26,6 +26,7 @@ public class MySensorManager {
         sensorList = new ArrayList<>();
         listenerList = new ArrayList<>();
 
+        // 生成各种需要用到的传感器对象
         for (int i = 0; i < sensorTypes.length; ++i) {
             Sensor ss = manager.getDefaultSensor(sensorTypes[i]);
             if (ss == null) {
@@ -46,6 +47,8 @@ public class MySensorManager {
             };
             listenerList.add(tmp);
         }
+
+        // 注册监听各种传感器
         Register(listenerList);
     }
 
@@ -61,14 +64,7 @@ public class MySensorManager {
         }
     }
 
-    private String valueToString(float[] values) {
-        String s = new String();
-        for (int i = 0; i < values.length; ++i) {
-            s += String.format("%f", values[i]);
-        }
-        return s;
-    }
-
+    // 将当前的传感器数据存入到buffer的指定列（position）
     public void getSensorData(float[][] buffer, int position) {
         int index = 0;
         for (int i = 0; i < sensorData.length; ++i) {
