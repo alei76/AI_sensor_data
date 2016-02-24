@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/AI_sensor_data.iml" filepath="$PROJECT_DIR$/AI_sensor_data.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/pca/pca.iml" filepath="$PROJECT_DIR$/pca/pca.iml" />
-      <module fileurl="file://$PROJECT_DIR$/pca/pca.iml" filepath="$PROJECT_DIR$/pca/pca.iml" />
     </modules>
   </component>
 </project>

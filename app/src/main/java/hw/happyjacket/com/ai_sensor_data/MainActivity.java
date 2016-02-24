@@ -56,8 +56,11 @@ public class MainActivity extends AppCompatActivity {
             File file = new File(modelFileName);
             if (!file.exists())
                 Utils.copyFilesFassets(this, SETTINGS.Assets_file_path, modelFileName);
-            else
+            else {
+                // 怕被覆盖了。。。每次启动都要重新加载
+                //Utils.copyFilesFassets(this, SETTINGS.Assets_file_path, modelFileName);
                 Log.d("File exists", modelFileName);
+            }
 
             /*String trainFileName = getExternalFilesDir(null) + File.separator + SETTINGS.Train_ARRF_File;
             SensorDataProxy.InsureArffFileHeader(this, trainFileName, false);*/
@@ -137,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedAction = position;
+                setTitle(AllActions.get(selectedAction).getLabel());
                 Toast.makeText(MainActivity.this, "选择动作：" + AllActions.get(selectedAction).getLabel(), Toast.LENGTH_SHORT).show();
             }
         });
